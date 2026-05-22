@@ -29,4 +29,9 @@ public class Score : MonoBehaviour
     {
         _playerAlive = false;
     }
+
+    public int GetFinalScore()
+    {
+        return _score;
+    }
 }
