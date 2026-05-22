@@ -3,20 +3,33 @@ using UnityEngine;
 
 public class HeartDisplay : MonoBehaviour
 {
-    [SerializeField] private Transform _contentParent;
+    [SerializeField] private RectTransform _contentParent; // Changed to RectTransform
     [SerializeField] private Health _health;
     [SerializeField] private GameObject _heart;
-    private int _heartSize = 50;
-    private int _placementOffset = 320;
-    public List<GameObject> _heartAmount;
+
+    // Adjusted spacing values for UI Screen Pixels
+    [SerializeField] private float _heartSize = 60f;
+    [SerializeField] private float _placementOffset = 0f;
+
+    public List<GameObject> _heartAmount = new List<GameObject>(); // Initialized list
 
     public void MakeHearts()
     {
+        foreach (var h in _heartAmount) { if (h != null) Destroy(h); }
+        _heartAmount.Clear();
+
         for (var i = 0; i < _health.CurrentHealth; i++)
         {
-            Vector2 pos = new Vector2(transform.position.x, i * -_heartSize + _placementOffset);
             var heart = Instantiate(_heart, _contentParent);
-            heart.transform.position = pos;
+
+            RectTransform rect = heart.GetComponent<RectTransform>();
+
+            if (rect != null)
+            {
+                float yPos = _placementOffset - (i * _heartSize);
+                rect.anchoredPosition = new Vector2(0f, yPos);
+            }
+
             _heartAmount.Add(heart);
         }
     }
